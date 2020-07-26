@@ -1,0 +1,22 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="VToolsTheme" parent="Theme.MaterialComponents.DayNight">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorPrimaryVariant">@color/primaryLightColor</item>
+        <item name="colorSecondary">@color/secondaryColor</item>
+        <item name="colorSecondaryVariant">@color/secondaryLightColor</item>
+        <item name="tabSelectedTextColor">@color/primaryTextColor</item>
+        <item name="android:tint">@color/primaryTextColor</item>
+        <item name="cardElevation">2dp</item>
+        <item name="android:shadowColor">#000</item>
+    </style>
+
+    <style name="VToolsTheme.NoActionBar" parent="VToolsTheme">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+</resources>

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "344589447475",
+    "firebase_url": "https://veranstaltungstools.firebaseio.com",
+    "project_id": "veranstaltungstools",
+    "storage_bucket": "veranstaltungstools.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:344589447475:android:14f8d4259d5e994a1d4e46",
+        "android_client_info": {
+          "package_name": "de.doerte.veranstaltungstools"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "344589447475-p6epag7uk4cro8sejl6gle8j9atqn57f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFjQRPTTBcfy4DYasMW5FU2q7Ml_h8His"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "344589447475-p6epag7uk4cro8sejl6gle8j9atqn57f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

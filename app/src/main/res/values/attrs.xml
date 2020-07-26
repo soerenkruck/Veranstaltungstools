@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2020.  ChemnitzSued Veranstaltungen
+
+  https://developer.android.com/training/custom-views/create-view
+  -->
+
+<resources>
+    <declare-styleable name="Spectrogram">
+        <attr name="colored" format="boolean"/>
+    </declare-styleable>
+</resources>

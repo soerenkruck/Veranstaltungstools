@@ -1,48 +1,35 @@
 package de.doerte.veranstaltungstools;
 
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
 
-import androidx.core.math.MathUtils;
 import androidx.fragment.app.Fragment;
 
-import android.text.TextPaint;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.github.amlcurran.showcaseview.OnShowcaseEventListener;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.Description;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.DataSet;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.AudioEvent;
 import be.tarsos.dsp.AudioProcessor;
-import be.tarsos.dsp.Oscilloscope;
 import be.tarsos.dsp.io.TarsosDSPAudioFormat;
 import be.tarsos.dsp.io.android.AudioDispatcherFactory;
 import be.tarsos.dsp.pitch.PitchDetectionHandler;
 import be.tarsos.dsp.pitch.PitchDetectionResult;
 import be.tarsos.dsp.pitch.PitchProcessor;
 import be.tarsos.dsp.util.fft.FFT;
+
 import de.doerte.veranstaltungstools.Const.ShowCaseElement;
-import de.doerte.veranstaltungstools.analyse.Analyser;
+import de.doerte.veranstaltungstools.Spectrogram.Spectrogram;
 import de.doerte.veranstaltungstools.analyse.Mathematics;
 
 public class StartFragment extends Fragment implements PitchDetectionHandler {
@@ -58,7 +45,9 @@ public class StartFragment extends Fragment implements PitchDetectionHandler {
     public View root;
 
     private AudioDispatcher dispatcher;
-    private LineChart realTimeDataChart;
+    //private LineChart realTimeDataChart;
+
+    private Spectrogram spectrogram;
 
     int sampleRate = 48000;
     int bufferSize = 4000/2;
@@ -112,23 +101,23 @@ public class StartFragment extends Fragment implements PitchDetectionHandler {
     }
 
     private void initChart() {
-        realTimeDataChart = (LineChart) root.findViewById(R.id.realTimeChart);
+        //realTimeDataChart = (LineChart) root.findViewById(R.id.realTimeChart);
 
-        List<Entry> entries = new ArrayList<Entry>();
+        //List<Entry> entries = new ArrayList<Entry>();
+        //
+        //entries.add(new Entry(0, 0));
 
-        entries.add(new Entry(0, 0));
+        //YAxis yAxis = realTimeDataChart.getAxisLeft();
+        //yAxis.setDrawZeroLine(false);
+        //yAxis.setAxisMinimum(0);
+        //yAxis.setAxisMaximum(80);
+        //yAxis.mAxisRange = 80;
+        //yAxis.setDrawLabels(true);
 
-        YAxis yAxis = realTimeDataChart.getAxisLeft();
-        yAxis.setDrawZeroLine(false);
-        yAxis.setAxisMinimum(0);
-        yAxis.setAxisMaximum(80);
-        yAxis.mAxisRange = 80;
-        yAxis.setDrawLabels(true);
+        //Legend legend = realTimeDataChart.getLegend();
+        //legend.setEnabled(true);
 
-        Legend legend = realTimeDataChart.getLegend();
-        legend.setEnabled(true);
-
-        realTimeDataChart.getAxisRight().setEnabled(false);
+        //realTimeDataChart.getAxisRight().setEnabled(false);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             graphColor = Color.rgb(1f, 0.5f, 0.6f);
@@ -136,24 +125,26 @@ public class StartFragment extends Fragment implements PitchDetectionHandler {
             graphColor = Color.RED;
         }
 
-        final LineDataSet dataSet = new LineDataSet(entries, "TestEntries");
-        dataSet.setColor(graphColor);
-        dataSet.setValueTextColor(Color.BLACK);
-        dataSet.setAxisDependency(YAxis.AxisDependency.RIGHT);
-        dataSet.setLabel("Zufälige Werte.");
+        //final LineDataSet dataSet = new LineDataSet(entries, "TestEntries");
+        //dataSet.setColor(graphColor);
+        //dataSet.setValueTextColor(Color.BLACK);
+        //dataSet.setAxisDependency(YAxis.AxisDependency.RIGHT);
+        //dataSet.setLabel("Zufälige Werte.");
+        //
+        //final LineData lineData = new LineData(dataSet);
+        ////realTimeDataChart.setData(lineData);
+        //Description description = new Description();
+        //description.setText("Oszillator");
+        ////realTimeDataChart.setDescription(description);
+        ////realTimeDataChart.invalidate();
 
-        final LineData lineData = new LineData(dataSet);
-        realTimeDataChart.setData(lineData);
-        Description description = new Description();
-        description.setText("Oszillator");
-        realTimeDataChart.setDescription(description);
-        realTimeDataChart.invalidate();
+        spectrogram = (Spectrogram) root.findViewById(R.id.spectrogram);
     }
 
     private void showShowcaseView() {
         showcaseView = new ShowcaseView.Builder(getActivity())
                 .withHoloShowcase()
-                .setTarget(new ViewTarget(realTimeDataChart))
+                .setTarget(new ViewTarget(spectrogram))
                 .setContentTitle("Der richtige Sound.")
                 .setContentText("Hier siehst du immer die Lautstärke der Frequenzen deines Sounds.\n\nBald wird dir hier eine KI helfen, automatisch Störgeräusche" +
                         " und Feedback zu erkennen.")
@@ -192,24 +183,32 @@ public class StartFragment extends Fragment implements PitchDetectionHandler {
     }
 
     public void paint(double pitch, float[] amplitudes, FFT fft) {
-        List<Entry> newEntries = new ArrayList<Entry>();
+        //List<Entry> newEntries = new ArrayList<Entry>();
+        //
+        //for (int i = 0; i < (amplitudes.length-1)/2; i++) {
+        //    int x = Mathematics.map(i, 0, (amplitudes.length-1), 1, sampleRate/bufferSize*1000);
+        //    newEntries.add(new Entry(x, amplitudes[i]));
+        //}
+        //
+        ////System.out.println(newEntries.size());
+        //
+        //LineDataSet dataSet = new LineDataSet(newEntries, "TestEntries");
+        //dataSet.setColor(graphColor);
+        //dataSet.setDrawCircles(false);
+        //dataSet.setValueTextColor(Color.BLACK);
+        //dataSet.setLabel("Lautstärke der Frequenz");
+        //
+        //LineData lineData = new LineData(dataSet);
+        ////realTimeDataChart.setData(lineData);
+        ////realTimeDataChart.invalidate();
 
-        for (int i = 0; i < (amplitudes.length-1)/2; i++) {
-            int x = Mathematics.map(i, 0, (amplitudes.length-1), 1, sampleRate/bufferSize*1000);
-            newEntries.add(new Entry(x, amplitudes[i]));
+        ArrayList<Float> values = new ArrayList<>();
+        for (int y = 0; y < (amplitudes.length/4) - 10; y++) {
+            values.add(amplitudes[y*4]);
         }
+        if (values.size() > 0)
+            spectrogram.push(values);
 
-        //System.out.println(newEntries.size());
-
-        LineDataSet dataSet = new LineDataSet(newEntries, "TestEntries");
-        dataSet.setColor(graphColor);
-        dataSet.setDrawCircles(false);
-        dataSet.setValueTextColor(Color.BLACK);
-        dataSet.setLabel("Lautstärke der Frequenz");
-
-        LineData lineData = new LineData(dataSet);
-        realTimeDataChart.setData(lineData);
-        realTimeDataChart.invalidate();
     }
 
     AudioProcessor fftProcessor = new AudioProcessor() {

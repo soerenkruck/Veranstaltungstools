@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2020.  ChemnitzSued Veranstaltungen
+  -->
+
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -44,13 +48,22 @@
                         android:layout_height="wrap_content"
                         android:text="@string/oscilloscope" />
 
+                    <!--
                     <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/realTimeChart"
                         android:layout_width="match_parent"
                         android:layout_height="256dp"
                         android:layout_marginTop="16dp">
+                        </com.github.mikephil.charting.charts.LineChart>
+                    -->
 
-                    </com.github.mikephil.charting.charts.LineChart>
+                    <de.doerte.veranstaltungstools.Spectrogram.Spectrogram
+                        android:id="@+id/spectrogram"
+                        android:layout_width="match_parent"
+                        android:layout_height="256dp"
+                        app:colored="false">
+                    </de.doerte.veranstaltungstools.Spectrogram.Spectrogram>
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

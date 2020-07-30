@@ -9,8 +9,8 @@ android {
         applicationId "de.doerte.veranstaltungstools"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 9
-        versionName "0.6.1 Beta"
+        versionCode 10
+        versionName "0.6.1.1 pre-Beta"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

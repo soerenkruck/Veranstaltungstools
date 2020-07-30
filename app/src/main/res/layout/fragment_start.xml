@@ -60,9 +60,17 @@
                     <de.doerte.veranstaltungstools.Spectrogram.Spectrogram
                         android:id="@+id/spectrogram"
                         android:layout_width="match_parent"
-                        android:layout_height="256dp"
-                        app:colored="false">
-                    </de.doerte.veranstaltungstools.Spectrogram.Spectrogram>
+                        android:layout_height="312dp"
+                        android:layout_margin="16dp"
+                        app:colored="true"></de.doerte.veranstaltungstools.Spectrogram.Spectrogram>
+
+                    <Switch
+                        android:id="@+id/bw_toggle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:text="@string/bw_toggle" />
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

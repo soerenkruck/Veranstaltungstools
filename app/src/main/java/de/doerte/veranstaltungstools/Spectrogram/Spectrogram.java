@@ -29,6 +29,8 @@ public class Spectrogram extends View {
 
     private Canvas canvas;
 
+    private int canHeight, canWidth;
+
     public Spectrogram(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -45,6 +47,14 @@ public class Spectrogram extends View {
 
         valuesX = new ArrayList<>();
         init();
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+
+        this.canWidth = w - 32;
+        this.canHeight = h;
     }
 
     private void init() {
@@ -65,12 +75,19 @@ public class Spectrogram extends View {
             for (int ix = 0; ix < valuesX.size()-1; ix++) {
                 for (int iy = 0; iy < valuesX.get(ix).size()-1; iy++) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        pointsPaint.setColor(Color.rgb(Mathematics.mapFloat(valuesX.get(ix).get(iy)*4, 0, 100, 0.2f, 1), 0, Mathematics.mapFloat(valuesX.get(ix).get(iy), 0, 100, 0.8f, 0f)));
-                    } else {
-                        pointsPaint.setColor(Color.BLACK);
+                        if (isColored) {
+                            pointsPaint.setColor(Color.rgb(Mathematics.mapFloat(valuesX.get(ix).get(iy)*4, 0, 100, 0.2f, 1),
+                                    0.1f,
+                                    Mathematics.mapFloat(valuesX.get(ix).get(iy), 0, 100, 0.8f, 0f)));
+                        } else {
+                            pointsPaint.setColor(Color.rgb(Mathematics.mapFloat(valuesX.get(ix).get(iy)*4, 0, 100, 1, 0),
+                                    Mathematics.mapFloat(valuesX.get(ix).get(iy)*4, 0, 100, 1, 0),
+                                    Mathematics.mapFloat(valuesX.get(ix).get(iy)*4, 0, 100, 1, 0)));
+                        }
                     }
-                    //canvas.drawPoint(ix, iy, pointsPaint);
+
                     canvas.drawRect(ix*4, iy*4, ix*4+4, iy*4+4, pointsPaint);
+
                 }
             }
         }
@@ -90,7 +107,7 @@ public class Spectrogram extends View {
     }
 
     public void push(ArrayList<Float> values) {
-        if (valuesX.size() > 220) {
+        if (valuesX.size() > canWidth/4) {
             valuesX.remove(0);
         }
 

@@ -10,10 +10,13 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 
 import com.github.amlcurran.showcaseview.OnShowcaseEventListener;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
+import com.google.android.gms.drive.events.ChangeListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,6 +98,14 @@ public class StartFragment extends Fragment implements PitchDetectionHandler {
         initChart();
         createDispatcher();
         showShowcaseView();
+
+        final Switch bwToggle = (Switch) root.findViewById(R.id.bw_toggle);
+        bwToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                spectrogram.setColored(!bwToggle.isChecked());
+            }
+        });
         
         return root;
 

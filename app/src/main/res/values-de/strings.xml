@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2020.  ChemnitzSued Veranstaltungen
+  -->
+
+<resources>
+    <string name="app_name">Analyse</string>
+    <string name="tab_text_2">Startseite</string>
+    <string name="tab_text_3">Funk</string>
+    <string name="dmx_title">DMX Berechnungstool</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">In Entwicklung</string>
+    <string name="dip_switch_text">DIP-Schalter</string>
+    <string name="coming_soon">In Entwicklung</string>
+    <string name="welcome_text">Wenn Sie wünsche an unser Team, oder einen Fehler bemerkt haben, dann schreiben sie uns gerne an.</string>
+    <string name="welcome_titel">Willkommen</string>
+    <string name="recordText">Aufnehmen</string>
+    <string name="createText">Erstellen</string>
+    <string name="joinText">Beitreten</string>
+    <string name="joinMsg">Du wirst mit dem Funk verbunden...</string>
+    <string name="noConnection">Keine Verbindung.</string>
+    <string name="createdRoom">Kanal erstellt.</string>
+    <string name="connceted">Verbunden.</string>
+    <string name="msgCenter">Nachrichten</string>
+    <string name="fail">Fehler</string>
+    <string name="help">Hilfe</string>
+    <string name="ready">Bereit</string>
+    <string name="passwordQuestion">Möchten sie den Kanal zusätzlich mit einem Passwort schützen?</string>
+    <string name="oscilloscope">Spektrogramm</string>
+    <string name="bw_toggle">Schwarz/Weiß</string>
+    <string name="no_cam_perm">Keine Berechtigung für die Kamera gewährt. Ein Neustart könnte das Problem lösen.</string>
+</resources>

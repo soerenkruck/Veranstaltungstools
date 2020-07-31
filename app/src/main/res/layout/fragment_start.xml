@@ -57,12 +57,18 @@
                         </com.github.mikephil.charting.charts.LineChart>
                     -->
 
-                    <de.doerte.veranstaltungstools.Spectrogram.Spectrogram
-                        android:id="@+id/spectrogram"
+                    <!-- Spektrogramm-->
+                    <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="312dp"
-                        android:layout_margin="16dp"
-                        app:colored="true"></de.doerte.veranstaltungstools.Spectrogram.Spectrogram>
+                        android:layout_margin="8dp">
+
+                        <de.doerte.veranstaltungstools.Spectrogram.Spectrogram
+                            android:id="@+id/spectrogram"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:colored="true" />
+                    </androidx.cardview.widget.CardView>
 
                     <Switch
                         android:id="@+id/bw_toggle"
@@ -70,6 +76,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
+                        android:checked="true"
                         android:text="@string/bw_toggle" />
 
                 </LinearLayout>

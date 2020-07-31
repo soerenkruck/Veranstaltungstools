@@ -30,6 +30,10 @@ public class Spectrogram extends View {
     private Canvas canvas;
 
     private int canHeight, canWidth;
+    private int pixelSize = 2;
+
+    private int counter = 1;
+    private int pause = 5;
 
     public Spectrogram(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -53,7 +57,7 @@ public class Spectrogram extends View {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
 
-        this.canWidth = w - 32;
+        this.canWidth = w + 8;
         this.canHeight = h;
     }
 
@@ -61,40 +65,46 @@ public class Spectrogram extends View {
         canvas = new Canvas();
 
         pointsPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        if (isColored)
-            pointsPaint.setColor(Color.BLUE);
-        else
-            pointsPaint.setColor(Color.WHITE);
+        pointsPaint.setColor(Color.BLACK);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if (valuesX != null) {
-            for (int ix = 0; ix < valuesX.size()-1; ix++) {
-                for (int iy = 0; iy < valuesX.get(ix).size()-1; iy++) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        if (isColored) {
-                            pointsPaint.setColor(Color.rgb(Mathematics.mapFloat(valuesX.get(ix).get(iy)*4, 0, 100, 0.2f, 1),
-                                    0.1f,
-                                    Mathematics.mapFloat(valuesX.get(ix).get(iy), 0, 100, 0.8f, 0f)));
-                        } else {
-                            pointsPaint.setColor(Color.rgb(Mathematics.mapFloat(valuesX.get(ix).get(iy)*4, 0, 100, 1, 0),
-                                    Mathematics.mapFloat(valuesX.get(ix).get(iy)*4, 0, 100, 1, 0),
-                                    Mathematics.mapFloat(valuesX.get(ix).get(iy)*4, 0, 100, 1, 0)));
+        //if (counter == pause) {
+            if (valuesX != null) {
+                for (int ix = 0; ix < valuesX.size() - 1; ix++) {
+                    if (valuesX.get(ix) != null) {
+                        for (int iy = 0; iy < valuesX.get(ix).size() - 1; iy++) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                if (valuesX.get(ix).get(iy) > 0.1) {
+                                    if (valuesX.get(ix).get(iy) != null) {
+                                        if (isColored) {
+                                            pointsPaint.setColor(Color.rgb(Mathematics.mapFloat(valuesX.get(ix).get(iy) * pixelSize, 0, 100, 0f, 1),
+                                                    0f,
+                                                    Mathematics.mapFloat(valuesX.get(ix).get(iy), 0, 100, 1f, 0f)));
+                                        } else {
+                                            float bw = Mathematics.mapFloat(valuesX.get(ix).get(iy) * pixelSize, 0, 100, 1, 0);
+                                            int bwColor = Color.rgb(bw, bw, bw);
+                                            pointsPaint.setColor(bwColor);
+                                        }
+                                    }
+                                }
+                            }
+                            if (valuesX.get(ix).get(iy) > 0.05)
+                                canvas.drawRect(ix * pixelSize, iy * pixelSize, ix * pixelSize + pixelSize, iy * pixelSize + pixelSize, pointsPaint);
                         }
                     }
-
-                    canvas.drawRect(ix*4, iy*4, ix*4+4, iy*4+4, pointsPaint);
-
                 }
             }
-        }
+            //counter = 0;
+        //} else {
+          //  counter++;
+        //}
 
         invalidate();
         requestLayout();
-
     }
 
     public void setColored(boolean colored) {
@@ -107,10 +117,16 @@ public class Spectrogram extends View {
     }
 
     public void push(ArrayList<Float> values) {
-        if (valuesX.size() > canWidth/4) {
+        if (valuesX.size() > (canWidth/pixelSize)) {
             valuesX.remove(0);
         }
-
         valuesX.add(values);
+    }
+
+    public int getPixelSize() { // The default value is 2;
+        return pixelSize;
+    }
+    public void setPixelSize(int size) {
+        this.pixelSize = size;
     }
 }

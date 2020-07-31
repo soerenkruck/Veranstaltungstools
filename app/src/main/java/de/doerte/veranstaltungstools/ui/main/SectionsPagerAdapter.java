@@ -22,12 +22,13 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     private static final int[] TAB_TITLES = new int[]{R.string.tab_text_1, R.string.tab_text_2, R.string.tab_text_3};
     private final Context mContext;
 
-    private boolean perm;
+    private boolean micPerm, camPerm;
 
-    public SectionsPagerAdapter(Context context, FragmentManager fm, boolean permissionsAccepted) {
+    public SectionsPagerAdapter(Context context, FragmentManager fm, boolean micPermissionAccepted, boolean camPermissionAccepted) {
         super(fm);
         mContext = context;
-        this.perm = permissionsAccepted;
+        this.camPerm = camPermissionAccepted;
+        this.micPerm = micPermissionAccepted;
     }
 
     @Override
@@ -38,10 +39,10 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                 fragment = PlaceholderFragment.newInstance(0);
                 break;
             case 1:
-                fragment = StartFragment.newInstance("nothing", "nothing");
+                fragment = StartFragment.newInstance(micPerm);
                 break;
             case 2:
-                fragment = ChatFragment.newInstance(perm, "nothing");
+                fragment = ChatFragment.newInstance(camPerm);
                 break;
         }
         return fragment;

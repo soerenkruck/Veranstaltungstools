@@ -1,12 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2020.  ChemnitzSued Veranstaltungen
+  -->
+
 <resources>
-    <string name="tab_text_1" translatable="false">DMX Tool</string>
-    <string name="todo" translatable="false">TODO</string>
-    <string name="dmx_standard" translatable="false">0</string>
-    <string name="minus16" translatable="false">-16</string>
-    <string name="plus16" translatable="false">+16</string>
-    <string name="string_analyse" translatable="false">Analysetools</string>
-    <string name="contact" translatable="false">chemnitzsued.veranstaltungen@gmail.com</string>
-    <string name="dbViewNormalString" translatable="false">still no data</string>
     <string name="app_name">Analysis</string>
     <string name="tab_text_2">Main</string>
     <string name="tab_text_3">Radio</string>

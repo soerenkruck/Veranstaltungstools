@@ -42,8 +42,7 @@ public class StartFragment extends Fragment implements PitchDetectionHandler {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private boolean micPermission;
 
     public View root;
 
@@ -64,16 +63,18 @@ public class StartFragment extends Fragment implements PitchDetectionHandler {
 
     private double pitch;
 
+
+    public boolean run = true;
+
     private final int SHOWCASEVIEW_ID = 2206;
 
     public StartFragment() {
     }
 
-    public static StartFragment newInstance(String param1, String param2) {
+    public static StartFragment newInstance(boolean micPerm) {
         StartFragment fragment = new StartFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putBoolean(ARG_PARAM1, micPerm);
         fragment.setArguments(args);
         return fragment;
     }
@@ -82,8 +83,7 @@ public class StartFragment extends Fragment implements PitchDetectionHandler {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            micPermission = getArguments().getBoolean(ARG_PARAM1);
         }
     }
 
@@ -96,7 +96,9 @@ public class StartFragment extends Fragment implements PitchDetectionHandler {
         estimationAlgorithm = PitchProcessor.PitchEstimationAlgorithm.DYNAMIC_WAVELET;
 
         initChart();
-        createDispatcher();
+        if (micPermission) {
+            createDispatcher();
+        }
         showShowcaseView();
 
         final Switch bwToggle = (Switch) root.findViewById(R.id.bw_toggle);
@@ -106,29 +108,13 @@ public class StartFragment extends Fragment implements PitchDetectionHandler {
                 spectrogram.setColored(!bwToggle.isChecked());
             }
         });
+        spectrogram.setColored(!bwToggle.isChecked());
         
         return root;
 
     }
 
     private void initChart() {
-        //realTimeDataChart = (LineChart) root.findViewById(R.id.realTimeChart);
-
-        //List<Entry> entries = new ArrayList<Entry>();
-        //
-        //entries.add(new Entry(0, 0));
-
-        //YAxis yAxis = realTimeDataChart.getAxisLeft();
-        //yAxis.setDrawZeroLine(false);
-        //yAxis.setAxisMinimum(0);
-        //yAxis.setAxisMaximum(80);
-        //yAxis.mAxisRange = 80;
-        //yAxis.setDrawLabels(true);
-
-        //Legend legend = realTimeDataChart.getLegend();
-        //legend.setEnabled(true);
-
-        //realTimeDataChart.getAxisRight().setEnabled(false);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             graphColor = Color.rgb(1f, 0.5f, 0.6f);
@@ -136,20 +122,8 @@ public class StartFragment extends Fragment implements PitchDetectionHandler {
             graphColor = Color.RED;
         }
 
-        //final LineDataSet dataSet = new LineDataSet(entries, "TestEntries");
-        //dataSet.setColor(graphColor);
-        //dataSet.setValueTextColor(Color.BLACK);
-        //dataSet.setAxisDependency(YAxis.AxisDependency.RIGHT);
-        //dataSet.setLabel("Zufälige Werte.");
-        //
-        //final LineData lineData = new LineData(dataSet);
-        ////realTimeDataChart.setData(lineData);
-        //Description description = new Description();
-        //description.setText("Oszillator");
-        ////realTimeDataChart.setDescription(description);
-        ////realTimeDataChart.invalidate();
-
         spectrogram = (Spectrogram) root.findViewById(R.id.spectrogram);
+        spectrogram.setPixelSize(4);
     }
 
     private void showShowcaseView() {
@@ -194,28 +168,12 @@ public class StartFragment extends Fragment implements PitchDetectionHandler {
     }
 
     public void paint(double pitch, float[] amplitudes, FFT fft) {
-        //List<Entry> newEntries = new ArrayList<Entry>();
-        //
-        //for (int i = 0; i < (amplitudes.length-1)/2; i++) {
-        //    int x = Mathematics.map(i, 0, (amplitudes.length-1), 1, sampleRate/bufferSize*1000);
-        //    newEntries.add(new Entry(x, amplitudes[i]));
-        //}
-        //
-        ////System.out.println(newEntries.size());
-        //
-        //LineDataSet dataSet = new LineDataSet(newEntries, "TestEntries");
-        //dataSet.setColor(graphColor);
-        //dataSet.setDrawCircles(false);
-        //dataSet.setValueTextColor(Color.BLACK);
-        //dataSet.setLabel("Lautstärke der Frequenz");
-        //
-        //LineData lineData = new LineData(dataSet);
-        ////realTimeDataChart.setData(lineData);
-        ////realTimeDataChart.invalidate();
-
         ArrayList<Float> values = new ArrayList<>();
-        for (int y = 0; y < (amplitudes.length/4) - 10; y++) {
-            values.add(amplitudes[y*4]);
+
+        int size = spectrogram.getPixelSize();
+
+        for (int y = 0; y < (amplitudes.length/size) - 10; y++) {
+            values.add(amplitudes[y*size]);
         }
         if (values.size() > 0)
             spectrogram.push(values);
@@ -229,13 +187,16 @@ public class StartFragment extends Fragment implements PitchDetectionHandler {
 
         @Override
         public boolean process(AudioEvent audioEvent) {
-            float[] audioFloatBuffer = audioEvent.getFloatBuffer();
-            float[] transformBuffer = new float[bufferSize*2];
-            System.arraycopy(audioFloatBuffer, 0, transformBuffer, 0, audioFloatBuffer.length);
-            fft.forwardTransform(transformBuffer);
-            fft.modulus(transformBuffer, ampluitudes);
-            paint(pitch, ampluitudes, fft);
 
+            if (run) {
+                float[] audioFloatBuffer = audioEvent.getFloatBuffer();
+                float[] transformBuffer = new float[bufferSize * 2];
+                System.arraycopy(audioFloatBuffer, 0, transformBuffer, 0, audioFloatBuffer.length);
+                fft.forwardTransform(transformBuffer);
+                fft.modulus(transformBuffer, ampluitudes);
+
+                paint(pitch, ampluitudes, fft);
+            }
             return true;
         }
 

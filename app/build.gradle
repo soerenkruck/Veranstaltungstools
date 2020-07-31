@@ -9,8 +9,8 @@ android {
         applicationId "de.doerte.veranstaltungstools"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 10
-        versionName "0.6.1.1 pre-Beta"
+        versionCode 12
+        versionName "0.6.1.5 Beta"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -45,6 +45,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:19.3.1'
     implementation 'com.google.firebase:firebase-messaging:20.2.3'
     implementation 'com.github.amlcurran.showcaseview:library:5.4.3'
+    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'

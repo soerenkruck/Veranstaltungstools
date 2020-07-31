@@ -28,9 +28,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.amlcurran.showcaseview.ShowcaseView;
-import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,7 +42,7 @@ import com.google.zxing.integration.android.IntentResult;
 
 import java.util.UUID;
 
-import de.doerte.veranstaltungstools.Const.ShowCaseElement;
+import de.doerte.veranstaltungstools.QR.CodeTransformer;
 import de.doerte.veranstaltungstools.QR.QRCodeEncoder;
 
 /**
@@ -58,8 +57,7 @@ public class ChatFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private boolean perms;
-    private String mParam2;
+    private boolean camPermission;
 
     public View root;
 
@@ -70,6 +68,8 @@ public class ChatFragment extends Fragment {
 
     private static final String END_CODE = "$LEFT[]";
     private static final String NO_PASSWORD_CODE = "$NO_PASSWORD[]_key";
+
+    private boolean permissionsAccepted;
 
     private TextView statusView;
     private FloatingActionButton qrViewButton;
@@ -88,11 +88,10 @@ public class ChatFragment extends Fragment {
     public ChatFragment() {
         // Required empty public constructor
     }
-    public static ChatFragment newInstance(boolean param1, String param2) {
+    public static ChatFragment newInstance(boolean param1) {
         ChatFragment fragment = new ChatFragment();
         Bundle args = new Bundle();
         args.putBoolean(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -101,8 +100,7 @@ public class ChatFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            perms = getArguments().getBoolean(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            camPermission = getArguments().getBoolean(ARG_PARAM1);
         }
     }
     @Override
@@ -118,7 +116,6 @@ public class ChatFragment extends Fragment {
     private void init() {
         ownID = UUID.randomUUID().toString();
         currentChannel = null;
-
         initScan();
         initUI();
     }
@@ -135,8 +132,13 @@ public class ChatFragment extends Fragment {
     }
 
     private void scan() {
-        integrator.initiateScan();
+        if (camPermission) {
+            integrator.initiateScan();
+        } else {
+            Toast.makeText(getContext(), R.string.no_cam_perm, Toast.LENGTH_SHORT).show();
+        }
     }
+
     private void initScan() {
         integrator = IntentIntegrator.forSupportFragment(this);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
@@ -230,7 +232,6 @@ public class ChatFragment extends Fragment {
             }
         });
     }
-
 
     private void viewPasswordOption() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -365,7 +366,7 @@ public class ChatFragment extends Fragment {
             qrView.setImageBitmap(getBitmapByCode(channelID));
             qrView.setPadding(0, 0, 0, 144);
             TextView uuidView = new TextView(getContext());
-            uuidView.setText("ID: " + channelID + "\nShort Code: " + getShortCode(channelID));
+            uuidView.setText("ID: " + channelID + "\nShort Code: " + CodeTransformer.getShortCode(channelID));
             uuidView.setPadding(16, 0, 16, 32);
             uuidView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM);
             qrDialog.addContentView(qrView,
@@ -462,7 +463,7 @@ public class ChatFragment extends Fragment {
         String value = cmd;
         if (value != null) {
             if (value.equals(CONNECTION_CODE)) {
-                statusView.setText(getResources().getString(R.string.connceted) + "\nSC: " + getShortCode(value));
+                statusView.setText(getResources().getString(R.string.connceted) + "\nSC: " + CodeTransformer.getShortCode(value));
                 conncted = true;
                 setConnectionStatus(conncted);
             } else if (value.equals(ownID + END_CODE)) {
@@ -474,14 +475,4 @@ public class ChatFragment extends Fragment {
             }
         }
     }
-    private String getShortCode(String code) {
-        String shortCode = "";
-
-        String tmp[] = channelID.split("-");
-        for (int i = 0; i < tmp.length; i++) {
-            shortCode += tmp[i].charAt(0);
-        }
-        return shortCode;
-    }
-
 }

@@ -8,8 +8,6 @@
     <string name="tab_text_2">Startseite</string>
     <string name="tab_text_3">Funk</string>
     <string name="dmx_title">DMX Berechnungstool</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">In Entwicklung</string>
     <string name="dip_switch_text">DIP-Schalter</string>
     <string name="coming_soon">In Entwicklung</string>
@@ -30,4 +28,14 @@
     <string name="oscilloscope">Spektrogramm</string>
     <string name="bw_toggle">Schwarz/Weiß</string>
     <string name="no_cam_perm">Keine Berechtigung für die Kamera gewährt. Ein Neustart könnte das Problem lösen.</string>
+    <string name="Audioanalyse">Audioanalyse</string>
+    <string name="sound">Akustik</string>
+    <string name="comunication">Kommunikation</string>
+    <string name="light">Licht</string>
+    <string name="no_mic_permission">Sie haben keine Berechtigung|für das Mikrofon gewährt.</string>
+    <string name="audio_analys_title">Audioanalyse</string>
+    <string name="outdated1">Du kannst diese Funktion aufgrund deiner</string>
+    <string name="outdated2">veralteten Android Version nicht nutzen.</string>
+    <string name="veranstaltungstools">Veranstaltungstools</string>
+    <string name="version">Version</string>
 </resources>

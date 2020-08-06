@@ -6,7 +6,7 @@
     <color name="secondaryColor">#e2585b</color>
     <color name="secondaryLightColor">#ff8a88</color>
     <color name="secondaryDarkColor">#ab2432</color>
-    <color name="primaryTextColor">#fff</color>
+    <color name="primaryTextColor">#232F34</color>
     <color name="secondaryTextColor">#fff</color>
     <color name="tabNotSelectedColor">#f5f5f5</color>
     <color name="warningColor">#ffb300</color>

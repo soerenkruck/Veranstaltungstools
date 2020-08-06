@@ -28,4 +28,14 @@
     <string name="oscilloscope">spectrogram</string>
     <string name="bw_toggle">black/white</string>
     <string name="no_cam_perm">no permissions for using the camera. Maybe a restart can bring succes.</string>
+    <string name="Audioanalyse">Audioanalysis</string>
+    <string name="sound">acoustics</string>
+    <string name="comunication">communication</string>
+    <string name="light">light</string>
+    <string name="no_mic_permission">You did not agreed the|microphone permissions</string>
+    <string name="audio_analys_title">sound analysis</string>
+    <string name="outdated1">Sorry, you can\'t use this function because</string>
+    <string name="outdated2">of your outdated android version.</string>
+    <string name="veranstaltungstools">Event tools</string>
+    <string name="version">version</string>
 </resources>
